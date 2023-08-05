@@ -4,7 +4,12 @@ project(gles-compatibility-layer)
 # Build
 add_library(gles-compatibility-layer STATIC src/state.c src/passthrough.c src/matrix.c src/draw.c)
 target_link_libraries(gles-compatibility-layer m)
-target_include_directories(gles-compatibility-layer PUBLIC include)
+
+# Include Path
+option(GLES_COMPATIBILITY_LAYER_USE_DEFAULT_INCLUDE_PATH "Use Default Include Path" TRUE)
+if(GLES_COMPATIBILITY_LAYER_USE_DEFAULT_INCLUDE_PATH)
+    target_include_directories(gles-compatibility-layer PUBLIC include)
+endif()
 
 # Shaders
 include(cmake/util.cmake)
