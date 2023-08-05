@@ -1,4 +1,10 @@
+#ifdef GLES_COMPATIBILITY_LAYER_USE_SDL
 #include <SDL.h>
+#else
+#define GLFW_INCLUDE_NONE
+#include <GLFW/glfw3.h>
+#define SDL_GL_GetProcAddress glfwGetProcAddress
+#endif
 
 #include "log.h"
 
