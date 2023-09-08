@@ -115,9 +115,10 @@ static GLuint get_shader() {
 }
 
 // Init
+#ifdef GLES_COMPATIBILITY_LAYER_USE_ES3
 GL_FUNC(glGenVertexArrays, void, (GLsizei n, GLuint *arrays));
 GL_FUNC(glBindVertexArray, void, (GLuint array));
-GL_FUNC(glActiveTexture, void, (GLenum texture));
+#endif
 void init_gles_compatibility_layer() {
     // State
     _init_gles_compatibility_layer_state();
@@ -126,9 +127,11 @@ void init_gles_compatibility_layer() {
     reset_variables();
 
     // Setup VAO
+#ifdef GLES_COMPATIBILITY_LAYER_USE_ES3
     GLuint vao;
     real_glGenVertexArrays()(1, &vao);
     real_glBindVertexArray()(vao);
+#endif
 
     // Load Shader
     GLuint program = get_shader();

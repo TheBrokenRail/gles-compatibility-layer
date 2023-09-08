@@ -8,6 +8,18 @@
 
 #include "log.h"
 
+// Testing
+#ifdef GLES_COMPATIBILITY_LAYER_TESTING
+typedef void (*test_t)();
+extern void add_test(const char *function_name);
+#define ADD_TEST(test) \
+    __attribute__((constructor)) static void add_##test##_test() { \
+        add_test(#test); \
+    }
+#else
+#define ADD_TEST(test)
+#endif
+
 // Load GL Function
 #if defined(_WIN32) && !defined(_WIN32_WCE) && !defined(__SCITECH_SNAP__)
 #define GL_APIENTRY __stdcall
@@ -26,4 +38,5 @@
             } \
         } \
         return func; \
-    }
+    } \
+    ADD_TEST(name)

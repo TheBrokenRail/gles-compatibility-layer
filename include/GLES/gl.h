@@ -170,6 +170,7 @@ void glLightModelfv(GLenum pname, const GLfloat *params);
 void glPixelStorei(GLenum pname, GLint param);
 
 // Not Part Of OpenGL ES 1.1
+#ifdef GLES_COMPATIBILITY_LAYER_USE_ES3
 #define GL_SAMPLES_PASSED_ARB 0x8c2f // GL_ANY_SAMPLES_PASSED
 #define GL_QUERY_RESULT_AVAILABLE_ARB 0x8867 // GL_QUERY_RESULT_AVAILABLE
 #define GL_QUERY_RESULT_ARB 0x8866 // GL_QUERY_RESULT
@@ -178,6 +179,7 @@ void glDeleteQueriesARB(GLsizei n, const GLuint *ids);
 void glBeginQueryARB(GLenum target, GLuint id);
 void glEndQueryARB(GLenum target);
 void glGetQueryObjectuivARB(GLuint id, GLenum pname, GLuint *params);
+#endif
 void extra_enable_highlight_mode(float red, float green, float blue, float alpha);
 void extra_disable_highlight_mode();
 
