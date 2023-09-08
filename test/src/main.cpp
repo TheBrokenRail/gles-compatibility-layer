@@ -108,7 +108,7 @@ int main() {
 
     // Make Window Context Current
     glfwMakeContextCurrent(glfw_window);
-    
+
     // Setup Compatibility Layer
     init_gles_compatibility_layer();
 

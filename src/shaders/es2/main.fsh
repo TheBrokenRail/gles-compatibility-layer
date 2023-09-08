@@ -23,7 +23,7 @@ void main(void) {
     gl_FragColor = v_color;
     // Texture
     if (u_has_texture) {
-        vec4 texture_color = texture(u_texture_unit, v_texture_pos.xy);
+        vec4 texture_color = texture2D(u_texture_unit, v_texture_pos.xy);
         if (u_highlight_mode) {
             texture_color.rgb = u_highlight_mode_color.rgb;
             texture_color.a *= u_highlight_mode_color.a;
