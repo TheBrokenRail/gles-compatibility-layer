@@ -95,6 +95,8 @@ extern "C" {
 #define GL_ACCUM 0x100
 #define GL_ALPHA 0x1906
 #define GL_NONE 0
+#define GL_LINE_SMOOTH 0xb20
+#define GL_SMOOTH_LINE_WIDTH_RANGE 0xb22
 
 typedef float GLfloat;
 typedef float GLclampf;
