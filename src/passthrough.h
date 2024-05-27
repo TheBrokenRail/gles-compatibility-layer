@@ -1,10 +1,4 @@
-#ifdef GLES_COMPATIBILITY_LAYER_USE_SDL
-#include <SDL.h>
-#else
-#define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h>
-#define SDL_GL_GetProcAddress glfwGetProcAddress
-#endif
+#include <GLES/gl.h>
 
 #include "log.h"
 
@@ -21,6 +15,7 @@ extern void add_test(const char *function_name);
 #endif
 
 // Load GL Function
+extern getProcAddress_t getProcAddress;
 #if defined(_WIN32) && !defined(_WIN32_WCE) && !defined(__SCITECH_SNAP__)
 #define GL_APIENTRY __stdcall
 #else
@@ -32,7 +27,7 @@ extern void add_test(const char *function_name);
     real_##name##_t real_##name() { \
         static real_##name##_t func = NULL; \
         if (!func) { \
-            func = (real_##name##_t) SDL_GL_GetProcAddress(#name); \
+            func = (real_##name##_t) getProcAddress(#name); \
             if (!func) { \
                 ERR("Error Resolving GL Symbol: " #name); \
             } \

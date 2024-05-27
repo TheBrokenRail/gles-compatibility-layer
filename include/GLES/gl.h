@@ -186,7 +186,9 @@ void glGetQueryObjectuivARB(GLuint id, GLenum pname, GLuint *params);
 void extra_enable_highlight_mode(float red, float green, float blue, float alpha);
 void extra_disable_highlight_mode();
 
-void init_gles_compatibility_layer();
+// Init
+typedef void *(*getProcAddress_t)(const char *);
+void init_gles_compatibility_layer(getProcAddress_t);
 
 #ifdef __cplusplus
 }

@@ -119,7 +119,10 @@ static GLuint get_shader() {
 GL_FUNC(glGenVertexArrays, void, (GLsizei n, GLuint *arrays));
 GL_FUNC(glBindVertexArray, void, (GLuint array));
 #endif
-void init_gles_compatibility_layer() {
+void init_gles_compatibility_layer(getProcAddress_t new_getProcAddress) {
+    // Setup Passthrough
+    getProcAddress = new_getProcAddress;
+
     // State
     _init_gles_compatibility_layer_state();
 

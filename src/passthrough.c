@@ -1,6 +1,7 @@
-#include <GLES/gl.h>
-
 #include "passthrough.h"
+
+// Get GL Function
+getProcAddress_t getProcAddress;
 
 // Simple v1.1 -> v2.0 Passthrough Functions
 GL_FUNC(glLineWidth, void, (GLfloat width));

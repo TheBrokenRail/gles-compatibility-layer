@@ -110,7 +110,7 @@ int main() {
     glfwMakeContextCurrent(glfw_window);
 
     // Setup Compatibility Layer
-    init_gles_compatibility_layer();
+    init_gles_compatibility_layer((getProcAddress_t) glfwGetProcAddress);
 
     // Run Tests
     load_headers();
