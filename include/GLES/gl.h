@@ -148,7 +148,7 @@ void glDisable(GLenum cap);
 void glCullFace(GLenum mode);
 void glRotatef(GLfloat angle, GLfloat x, GLfloat y, GLfloat z);
 void glViewport(GLint x, GLint y, GLsizei width, GLsizei height);
-__attribute__((unavailable)) void glNormal3f(GLfloat nx, GLfloat ny, GLfloat nz);
+void glNormal3f(GLfloat nx, GLfloat ny, GLfloat nz);
 GLboolean glIsEnabled(GLenum cap);
 void glGetIntegerv(GLenum pname, GLint *data);
 void glReadPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, void *data);
