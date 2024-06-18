@@ -6,10 +6,7 @@ add_library(gles-compatibility-layer STATIC src/state.c src/passthrough.c src/ma
 target_link_libraries(gles-compatibility-layer m)
 
 # Include Path
-option(GLES_COMPATIBILITY_LAYER_USE_DEFAULT_INCLUDE_PATH "Use Default Include Path" TRUE)
-if(GLES_COMPATIBILITY_LAYER_USE_DEFAULT_INCLUDE_PATH)
-    target_include_directories(gles-compatibility-layer PUBLIC include)
-endif()
+target_include_directories(gles-compatibility-layer PUBLIC include)
 
 # Shaders
 include(cmake/util.cmake)
