@@ -33,18 +33,9 @@ typedef struct {
     const void *pointer;
 } array_pointer_t;
 
-// Light
-typedef struct {
-    GLboolean enabled;
-    position_t position;
-    color_t diffuse;
-} light_source_t;
-
 // GL State
 typedef struct {
     color_t color;
-    position_t normal;
-    GLboolean rescale_normal;
     struct {
         GLenum mode;
         matrix_stack_t model_view;
@@ -55,7 +46,6 @@ typedef struct {
         array_pointer_t vertex;
         array_pointer_t color;
         array_pointer_t tex_coord;
-        array_pointer_t normal;
     } array_pointers;
     GLboolean alpha_test;
     GLboolean texture_2d;
@@ -66,11 +56,6 @@ typedef struct {
         GLfloat start;
         GLfloat end;
     } fog;
-    struct {
-        GLboolean enabled;
-        light_source_t light_sources[2];
-        color_t ambient;
-    } lighting;
 } gl_state_t;
 extern gl_state_t gl_state;
 void _init_gles_compatibility_layer_state();

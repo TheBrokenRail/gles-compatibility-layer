@@ -125,3 +125,6 @@ GL_FUNC(glPixelStorei, void, (GLenum pname, GLint param));
 void glPixelStorei(GLenum pname, GLint param) {
     real_glPixelStorei()(pname, param);
 }
+void glNormal3f(__attribute__((unused)) GLfloat nx, __attribute__((unused)) GLfloat ny, __attribute__((unused)) GLfloat nz) {
+    // Ignore
+}

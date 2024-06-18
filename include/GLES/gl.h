@@ -81,22 +81,10 @@ extern "C" {
 #define GL_DEPTH_BUFFER_BIT 0x100
 #define GL_COLOR_BUFFER_BIT 0x4000
 #define GL_NO_ERROR 0
-#define GL_NORMAL_ARRAY 0x8075
-#define GL_LIGHTING 0xb50
-#define GL_LIGHT0 0x4000
-#define GL_LIGHT1 0x4001
-#define GL_RESCALE_NORMAL 0x803a
-#define GL_AMBIENT 0x1200
-#define GL_DIFFUSE 0x1201
-#define GL_SPECULAR 0x1202
-#define GL_POSITION 0x1203
-#define GL_LIGHT_MODEL_AMBIENT 0xb53
 #define GL_BYTE 0x1400
 #define GL_ACCUM 0x100
 #define GL_ALPHA 0x1906
 #define GL_NONE 0
-#define GL_LINE_SMOOTH 0xb20
-#define GL_SMOOTH_LINE_WIDTH_RANGE 0xb22
 #define GL_ALIASED_LINE_WIDTH_RANGE 0x846e
 
 typedef float GLfloat;
@@ -160,16 +148,13 @@ void glDisable(GLenum cap);
 void glCullFace(GLenum mode);
 void glRotatef(GLfloat angle, GLfloat x, GLfloat y, GLfloat z);
 void glViewport(GLint x, GLint y, GLsizei width, GLsizei height);
-void glNormal3f(GLfloat nx, GLfloat ny, GLfloat nz);
+__attribute__((unavailable)) void glNormal3f(GLfloat nx, GLfloat ny, GLfloat nz);
 GLboolean glIsEnabled(GLenum cap);
 void glGetIntegerv(GLenum pname, GLint *data);
 void glReadPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, void *data);
 void glGenBuffers(GLsizei n, GLuint *buffers);
 GLenum glGetError();
 void glBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, const void *data);
-void glNormalPointer(GLenum type, GLsizei stride, const void *pointer);
-void glLightfv(GLenum light, GLenum pname, const GLfloat *params);
-void glLightModelfv(GLenum pname, const GLfloat *params);
 void glPixelStorei(GLenum pname, GLint param);
 
 // Init

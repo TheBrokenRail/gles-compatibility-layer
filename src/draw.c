@@ -161,10 +161,6 @@ void glDrawArrays(GLenum mode, GLint first, GLsizei count) {
     if (use_color_pointer && (gl_state.array_pointers.color.size != 4 || gl_state.array_pointers.color.type != GL_UNSIGNED_BYTE)) {
         ERR("Unsupported Color Conifguration");
     }
-    int use_normal_pointer = gl_state.lighting.enabled && gl_state.array_pointers.normal.enabled;
-    if (use_normal_pointer && gl_state.array_pointers.normal.type != GL_BYTE) {
-        ERR("Unsupported Normal Conifguration");
-    }
     int use_texture = gl_state.texture_2d && gl_state.array_pointers.tex_coord.enabled;
     if (use_texture && (gl_state.array_pointers.tex_coord.size != 2 || gl_state.array_pointers.tex_coord.type != GL_FLOAT)) {
         ERR("Unsupported Texture Conifguration");
@@ -209,41 +205,6 @@ void glDrawArrays(GLenum mode, GLint first, GLsizei count) {
         real_glVertexAttrib4f()(a_color_handle, gl_state.color.red, gl_state.color.green, gl_state.color.blue, gl_state.color.alpha);
     }
 
-    // Lighting
-    lazy_uniform(u_lighting);
-    real_glUniform1i()(u_lighting_handle, gl_state.lighting.enabled);
-    lazy_attrib(a_normal);
-    if (gl_state.lighting.enabled) {
-        lazy_uniform(u_lighting_ambient);
-        real_glUniform4f()(u_lighting_ambient_handle, gl_state.lighting.ambient.red, gl_state.lighting.ambient.green, gl_state.lighting.ambient.blue, gl_state.lighting.ambient.alpha);
-        light_source_t *light_source;
-#define light_source_uniforms(number) \
-    light_source = &gl_state.lighting.light_sources[number]; \
-    lazy_uniform(u_lighting_light_source_##number); \
-    real_glUniform1i()(u_lighting_light_source_##number##_handle, light_source->enabled); \
-    lazy_uniform(u_lighting_light_source_##number##_position); \
-    real_glUniform3f()(u_lighting_light_source_##number##_position_handle, light_source->position.x, light_source->position.y, light_source->position.z); \
-    lazy_uniform(u_lighting_light_source_##number##_diffuse); \
-    real_glUniform4f()(u_lighting_light_source_##number##_diffuse_handle, light_source->diffuse.red, light_source->diffuse.green, light_source->diffuse.blue, light_source->diffuse.alpha);
-        light_source_uniforms(0);
-        light_source_uniforms(1);
-
-        // Normal
-        if (use_normal_pointer) {
-            real_glVertexAttribPointer()(a_normal_handle, 3, gl_state.array_pointers.normal.type, 1, gl_state.array_pointers.normal.stride, gl_state.array_pointers.normal.pointer);
-            real_glEnableVertexAttribArray()(a_normal_handle);
-        } else {
-            real_glVertexAttrib3f()(a_normal_handle, gl_state.normal.x, gl_state.normal.y, gl_state.normal.z);
-        }
-        // Normal Rescale Factor (See Pages 46-47 Of https://registry.khronos.org/OpenGL/specs/gl/glspec15.pdf)
-        float normal_rescale_factor = 1;
-        if (gl_state.rescale_normal) {
-            normal_rescale_factor = 1.0f / sqrtf(powf(model_view->data[0][2], 2) + powf(model_view->data[1][2], 2) + powf(model_view->data[2][2], 2));
-        }
-        lazy_uniform(u_normal_rescale_factor);
-        real_glUniform1f()(u_normal_rescale_factor_handle, normal_rescale_factor);
-    }
-
     // Fog
     lazy_uniform(u_fog);
     real_glUniform1i()(u_fog_handle, gl_state.fog.enabled);
@@ -278,9 +239,6 @@ void glDrawArrays(GLenum mode, GLint first, GLsizei count) {
     // Cleanup
     if (use_color_pointer) {
         real_glDisableVertexAttribArray()(a_color_handle);
-    }
-    if (use_normal_pointer) {
-        real_glDisableVertexAttribArray()(a_normal_handle);
     }
     real_glDisableVertexAttribArray()(a_vertex_coords_handle);
     if (use_texture) {
