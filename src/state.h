@@ -71,10 +71,6 @@ typedef struct {
         light_source_t light_sources[2];
         color_t ambient;
     } lighting;
-    struct {
-        GLboolean enabled;
-        color_t color;
-    } highlight_mode;
 } gl_state_t;
 extern gl_state_t gl_state;
 void _init_gles_compatibility_layer_state();

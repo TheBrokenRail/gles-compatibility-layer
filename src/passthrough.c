@@ -121,28 +121,6 @@ GL_FUNC(glBufferSubData, void, (GLenum target, GLintptr offset, GLsizeiptr size,
 void glBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, const void *data) {
     real_glBufferSubData()(target, offset, size, data);
 }
-#ifdef GLES_COMPATIBILITY_LAYER_USE_ES3
-GL_FUNC(glGenQueries, void, (GLsizei n, GLuint *ids));
-void glGenQueriesARB(GLsizei n, GLuint *ids) {
-    real_glGenQueries()(n, ids);
-}
-GL_FUNC(glDeleteQueries, void, (GLsizei n, const GLuint *ids));
-void glDeleteQueriesARB(GLsizei n, const GLuint *ids) {
-    real_glDeleteQueries()(n, ids);
-}
-GL_FUNC(glBeginQuery, void, (GLenum target, GLuint id));
-void glBeginQueryARB(GLenum target, GLuint id) {
-    real_glBeginQuery()(target, id);
-}
-GL_FUNC(glEndQuery, void, (GLenum target));
-void glEndQueryARB(GLenum target) {
-    real_glEndQuery()(target);
-}
-GL_FUNC(glGetQueryObjectuiv, void, (GLuint id, GLenum pname, GLuint *params));
-void glGetQueryObjectuivARB(GLuint id, GLenum pname, GLuint *params) {
-    real_glGetQueryObjectuiv()(id, pname, params);
-}
-#endif
 GL_FUNC(glPixelStorei, void, (GLenum pname, GLint param));
 void glPixelStorei(GLenum pname, GLint param) {
     real_glPixelStorei()(pname, param);

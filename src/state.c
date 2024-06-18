@@ -81,9 +81,6 @@ static gl_state_t init_gl_state = {
             .blue = 0.2f,
             .alpha = 0.2f
         }
-    },
-    .highlight_mode = {
-        .enabled = 0
     }
 };
 gl_state_t gl_state;
@@ -321,16 +318,4 @@ void glLightModelfv(GLenum pname, const GLfloat *params) {
         gl_state.lighting.ambient.blue = params[2];
         gl_state.lighting.ambient.alpha = params[3];
     }
-}
-
-// Highlight Mode
-void extra_enable_highlight_mode(float red, float green, float blue, float alpha) {
-    gl_state.highlight_mode.enabled = 1;
-    gl_state.highlight_mode.color.red = red;
-    gl_state.highlight_mode.color.green = green;
-    gl_state.highlight_mode.color.blue = blue;
-    gl_state.highlight_mode.color.alpha = alpha;
-}
-void extra_disable_highlight_mode() {
-    gl_state.highlight_mode.enabled = 0;
 }

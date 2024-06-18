@@ -50,11 +50,7 @@ static void load_header(std::string filename) {
 }
 static void load_headers() {
     header_lines.clear();
-#ifdef GLES_COMPATIBILITY_LAYER_USE_ES3
-    load_header("/usr/include/GLES3/gl3.h");
-#else
     load_header("/usr/include/GLES2/gl2.h");
-#endif
 }
 
 // Run Test

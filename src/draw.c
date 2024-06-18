@@ -115,10 +115,6 @@ static GLuint get_shader() {
 }
 
 // Init
-#ifdef GLES_COMPATIBILITY_LAYER_USE_ES3
-GL_FUNC(glGenVertexArrays, void, (GLsizei n, GLuint *arrays));
-GL_FUNC(glBindVertexArray, void, (GLuint array));
-#endif
 void init_gles_compatibility_layer(getProcAddress_t new_getProcAddress) {
     // Setup Passthrough
     getProcAddress = new_getProcAddress;
@@ -128,13 +124,6 @@ void init_gles_compatibility_layer(getProcAddress_t new_getProcAddress) {
 
     // Reset Static Variables
     reset_variables();
-
-    // Setup VAO
-#ifdef GLES_COMPATIBILITY_LAYER_USE_ES3
-    GLuint vao;
-    real_glGenVertexArrays()(1, &vao);
-    real_glBindVertexArray()(vao);
-#endif
 
     // Load Shader
     GLuint program = get_shader();
@@ -218,14 +207,6 @@ void glDrawArrays(GLenum mode, GLint first, GLsizei count) {
         real_glEnableVertexAttribArray()(a_color_handle);
     } else {
         real_glVertexAttrib4f()(a_color_handle, gl_state.color.red, gl_state.color.green, gl_state.color.blue, gl_state.color.alpha);
-    }
-
-    // Highlight Mode
-    lazy_uniform(u_highlight_mode);
-    real_glUniform1i()(u_highlight_mode_handle, gl_state.highlight_mode.enabled);
-    if (gl_state.highlight_mode.enabled) {
-        lazy_uniform(u_highlight_mode_color);
-        real_glUniform4f()(u_highlight_mode_color_handle, gl_state.highlight_mode.color.red, gl_state.highlight_mode.color.green, gl_state.highlight_mode.color.blue, gl_state.highlight_mode.color.alpha);
     }
 
     // Lighting
