@@ -156,6 +156,7 @@ void glGenBuffers(GLsizei n, GLuint *buffers);
 GLenum glGetError();
 void glBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, const void *data);
 void glPixelStorei(GLenum pname, GLint param);
+void glMultiDrawArrays(GLenum mode, const GLint *first, const GLsizei *count, GLsizei drawcount);
 
 // Init
 typedef void *(*getProcAddress_t)(const char *);

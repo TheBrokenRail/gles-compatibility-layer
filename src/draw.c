@@ -131,7 +131,6 @@ void init_gles_compatibility_layer(getProcAddress_t new_getProcAddress) {
 }
 
 // Array Pointer Drawing
-GL_FUNC(glDrawArrays, void, (GLenum mode, GLint first, GLsizei count));
 #define lazy_handle(function, name) \
     static GLint name##_handle = -1; \
     if (name##_handle == -1) { \
@@ -143,7 +142,7 @@ GL_FUNC(glDrawArrays, void, (GLenum mode, GLint first, GLsizei count));
     }
 #define lazy_uniform(name) lazy_handle(glGetUniformLocation, name)
 #define lazy_attrib(name) lazy_handle(glGetAttribLocation, name)
-void glDrawArrays(GLenum mode, GLint first, GLsizei count) {
+static void draw(void (*func)(const void *), const void *data) {
     // Verify
     if (gl_state.array_pointers.vertex.size != 3 || !gl_state.array_pointers.vertex.enabled || gl_state.array_pointers.vertex.type != GL_FLOAT) {
         ERR("Unsupported Vertex Conifguration");
@@ -157,17 +156,17 @@ void glDrawArrays(GLenum mode, GLint first, GLsizei count) {
     }
 
     // Check Mode
-    int use_color_pointer = gl_state.array_pointers.color.enabled;
+    const int use_color_pointer = gl_state.array_pointers.color.enabled;
     if (use_color_pointer && (gl_state.array_pointers.color.size != 4 || gl_state.array_pointers.color.type != GL_UNSIGNED_BYTE)) {
-        ERR("Unsupported Color Conifguration");
+        ERR("Unsupported Color Configuration");
     }
-    int use_texture = gl_state.texture_2d && gl_state.array_pointers.tex_coord.enabled;
+    const int use_texture = gl_state.texture_2d && gl_state.array_pointers.tex_coord.enabled;
     if (use_texture && (gl_state.array_pointers.tex_coord.size != 2 || gl_state.array_pointers.tex_coord.type != GL_FLOAT)) {
-        ERR("Unsupported Texture Conifguration");
+        ERR("Unsupported Texture Configuration");
     }
 
     // Get Shader
-    GLuint program = get_shader();
+    const GLuint program = get_shader();
 
     // Projection Matrix
     lazy_uniform(u_projection);
@@ -180,8 +179,8 @@ void glDrawArrays(GLenum mode, GLint first, GLsizei count) {
     real_glUniformMatrix4fv()(u_model_view_handle, 1, 0, (GLfloat *) &model_view->data[0][0]);
 
     // Has Texture
-    lazy_uniform(u_has_texture); \
-    real_glUniform1i()(u_has_texture_handle, use_texture); \
+    lazy_uniform(u_has_texture);
+    real_glUniform1i()(u_has_texture_handle, use_texture);
 
     // Texture Matrix
     lazy_uniform(u_texture);
@@ -234,7 +233,7 @@ void glDrawArrays(GLenum mode, GLint first, GLsizei count) {
     }
 
     // Draw
-    real_glDrawArrays()(mode, first, count);
+    func(data);
 
     // Cleanup
     if (use_color_pointer) {
@@ -244,4 +243,46 @@ void glDrawArrays(GLenum mode, GLint first, GLsizei count) {
     if (use_texture) {
         real_glDisableVertexAttribArray()(a_texture_coords_handle);
     }
+}
+
+// glDrawArrays
+struct cmd_glDrawArrays {
+    GLenum mode;
+    GLint first;
+    GLsizei count;
+};
+GL_FUNC(glDrawArrays, void, (GLenum mode, GLint first, GLsizei count));
+static void do_glDrawArrays(const void *data) {
+    const struct cmd_glDrawArrays *cmd = data;
+    real_glDrawArrays()(cmd->mode, cmd->first, cmd->count);
+}
+void glDrawArrays(const GLenum mode, const GLint first, const GLsizei count) {
+    const struct cmd_glDrawArrays cmd = {
+        .mode = mode,
+        .first = first,
+        .count = count
+    };
+    draw(do_glDrawArrays, &cmd);
+}
+
+// glMultiDrawArrays
+struct cmd_glMultiDrawArrays {
+    GLenum mode;
+    const GLint *first;
+    const GLsizei *count;
+    GLsizei drawcount;
+};
+GL_FUNC(glMultiDrawArraysEXT, void, (GLenum mode, const GLint *first, const GLsizei *count, GLsizei drawcount));
+static void do_glMultiDrawArrays(const void *data) {
+    const struct cmd_glMultiDrawArrays *cmd = data;
+    real_glMultiDrawArraysEXT()(cmd->mode, cmd->first, cmd->count, cmd->drawcount);
+}
+void glMultiDrawArrays(const GLenum mode, const GLint *first, const GLsizei *count, const GLsizei drawcount) {
+    const struct cmd_glMultiDrawArrays cmd = {
+        .mode = mode,
+        .first = first,
+        .count = count,
+        .drawcount = drawcount
+    };
+    draw(do_glMultiDrawArrays, &cmd);
 }
